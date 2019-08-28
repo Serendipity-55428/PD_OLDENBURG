@@ -27,20 +27,20 @@ def layers(x_f, x_l, is_training):
         tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, bn1.updates)
         conv2 = tf.keras.layers.Conv2D(filters=64, kernel_size=[3, 3], padding='same', activation=tf.nn.relu,
                                        kernel_initializer=tf.keras.initializers.TruncatedNormal, name='conv2')(bn_input1)
-        # conv3 = tf.keras.layers.Conv2D(filters=128, kernel_size=[3, 3], padding='same', activation=tf.nn.relu,
-        #                                kernel_initializer=tf.keras.initializers.TruncatedNormal, name='conv3')(conv2)
-        pool2 = tf.keras.layers.MaxPool2D(pool_size=[2, 2], strides=2, padding='same', name='pool2')(conv2)
+        conv3 = tf.keras.layers.Conv2D(filters=64, kernel_size=[3, 3], padding='same', activation=tf.nn.relu,
+                                       kernel_initializer=tf.keras.initializers.TruncatedNormal, name='conv3')(conv2)
+        pool2 = tf.keras.layers.MaxPool2D(pool_size=[2, 2], strides=2, padding='same', name='pool2')(conv3)
         bn2 = tf.keras.layers.BatchNormalization(name='bn_input2')
         bn_input2 = bn2(inputs=pool2, training=is_training)
         # 添加bn层节点依赖
         tf.add_to_collection(tf.GraphKeys.UPDATE_OPS, bn2.updates)
-        # conv4 = tf.keras.layers.Conv2D(filters=64, kernel_size=[2, 2], padding='same', activation=tf.nn.relu,
-        #                                kernel_initializer=tf.keras.initializers.TruncatedNormal, name='conv4')(bn_input2)
-        flat1 = tf.keras.layers.Flatten(name='flat1')(bn_input2)
+        conv4 = tf.keras.layers.Conv2D(filters=64, kernel_size=[2, 2], padding='same', activation=tf.nn.relu,
+                                       kernel_initializer=tf.keras.initializers.TruncatedNormal, name='conv4')(bn_input2)
+        flat1 = tf.keras.layers.Flatten(name='flat1')(conv4)
     with tf.name_scope('rnn'):
         x_lstm = tf.reshape(tensor=flat1, shape=[-1, 24, 24], name='x_lstm')
         # lstm1 = tf.keras.layers.LSTM(units=128, dropout=0.8, return_sequences=True, name='lstm1')(x_lstm)
-        lstm2 = tf.keras.layers.LSTM(units=128, dropout=0.8, return_sequences=False, name='lstm2')(x_lstm)
+        lstm2 = tf.keras.layers.LSTM(units=64, dropout=0.8, return_sequences=False, name='lstm2')(x_lstm)
         flat2 = tf.keras.layers.Flatten(name='flat2')(lstm2)
     with tf.name_scope('dnn'):
         x_dnn = tf.concat(values=[flat2, x_f], axis=1)
@@ -48,13 +48,13 @@ def layers(x_f, x_l, is_training):
                                       kernel_initializer=tf.keras.initializers.TruncatedNormal,
                                       bias_initializer=tf.keras.initializers.TruncatedNormal, name='x_fc1')(x_dnn)
         x_dpt1 = tf.keras.layers.Dropout(rate=0.2, name='x_dpt1')(inputs=x_fc1, training=is_training)
-        # x_fc2 = tf.keras.layers.Dense(units=200, activation=tf.nn.relu, use_bias=True,
-        #                               kernel_initializer=tf.keras.initializers.TruncatedNormal,
-        #                               bias_initializer=tf.keras.initializers.TruncatedNormal, name='x_fc2')(x_dpt1)
-        # x_dpt2 = tf.keras.layers.Dropout(rate=0.2, name='x_dpt2')(inputs=x_fc2, training=is_training)
+        x_fc2 = tf.keras.layers.Dense(units=200, activation=tf.nn.relu, use_bias=True,
+                                      kernel_initializer=tf.keras.initializers.TruncatedNormal,
+                                      bias_initializer=tf.keras.initializers.TruncatedNormal, name='x_fc2')(x_dpt1)
+        x_dpt2 = tf.keras.layers.Dropout(rate=0.2, name='x_dpt2')(inputs=x_fc2, training=is_training)
         output = tf.keras.layers.Dense(units=3, activation=tf.nn.relu, use_bias=True,
                                        kernel_initializer=tf.keras.initializers.TruncatedNormal,
-                                       bias_initializer=tf.keras.initializers.TruncatedNormal, name='output')(x_dpt1)
+                                       bias_initializer=tf.keras.initializers.TruncatedNormal, name='output')(x_dpt2)
         output = tf.keras.activations.softmax(x=output)
     return output
 
