@@ -119,7 +119,7 @@ def subnet_resnet_1(x_f, x_l, is_training):
                                       kernel_initializer=tf.keras.initializers.TruncatedNormal,
                                       bias_initializer=tf.keras.initializers.TruncatedNormal, name='x_fc2')(x_dpt1)
         x_dpt2 = tf.keras.layers.Dropout(rate=0.2, name='x_dpt2')(inputs=x_fc2, training=is_training)
-        output = tf.keras.layers.Dense(units=3, activation=tf.nn.relu, use_bias=True,
+        output = tf.keras.layers.Dense(units=4, activation=tf.nn.relu, use_bias=True,
                                        kernel_initializer=tf.keras.initializers.TruncatedNormal,
                                        bias_initializer=tf.keras.initializers.TruncatedNormal, name='output')(x_dpt2)
         output2 = tf.keras.activations.softmax(x=output)
@@ -214,7 +214,7 @@ def subnet_resnet_2(x_f, x_l, is_training):
                                       kernel_initializer=tf.keras.initializers.TruncatedNormal,
                                       bias_initializer=tf.keras.initializers.TruncatedNormal, name='x_fc2')(x_dpt1)
         x_dpt2 = tf.keras.layers.Dropout(rate=0.2, name='x_dpt2')(inputs=x_fc2, training=is_training)
-        output = tf.keras.layers.Dense(units=11, activation=tf.nn.relu, use_bias=True,
+        output = tf.keras.layers.Dense(units=10, activation=tf.nn.relu, use_bias=True,
                                        kernel_initializer=tf.keras.initializers.TruncatedNormal,
                                        bias_initializer=tf.keras.initializers.TruncatedNormal, name='output')(x_dpt2)
         output2 = tf.keras.activations.softmax(x=output)

@@ -32,8 +32,8 @@ def session_sub1(dataset_path, train_path='', test_path=''):
             y = tf.placeholder(dtype=tf.float32, shape=[None, 4], name='y')
             learning_rate = tf.placeholder(dtype=tf.float32, name='lr')
             is_training = tf.placeholder(dtype=tf.bool, name='is_training')
-        # output = subnet_resnet_1(x_f=x_f, x_l=x_l, is_training=is_training)
-        output = subnet_cnnlstm_1(x_f=x_f, x_l=x_l, is_training=is_training)
+        output = subnet_resnet_1(x_f=x_f, x_l=x_l, is_training=is_training)
+        # output = subnet_cnnlstm_1(x_f=x_f, x_l=x_l, is_training=is_training)
         with tf.name_scope('prediction'):
             loss = tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=y, y_pred=output))
             opt = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(loss)
@@ -48,21 +48,21 @@ def session_sub1(dataset_path, train_path='', test_path=''):
         train_data, test_data = spliting(dataset, 2269)
         for i in range(20000):
             for data in input(dataset=train_data, batch_size=500):
-                _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-3], y: data[:, -3:],
+                _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-4], y: data[:, -4:],
                                              learning_rate: 1e-2, is_training: False})
                 if i % 100 == 0:
-                    loss_ = sess.run(loss, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-3], y: data[:, -3:],
+                    loss_ = sess.run(loss, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-4], y: data[:, -4:],
                                                       is_training: False})
-                    acc_1 = sess.run(acc, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-3], y: data[:, -3:],
+                    acc_1 = sess.run(acc, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-4], y: data[:, -4:],
                                                      is_training: False})
             if i % 100 == 0:
-                acc_2 = sess.run(acc, feed_dict={x_f: test_data[:, :4], x_l: test_data[:, 4:-3],
-                                                 y: test_data[:, -3:], is_training: False})
+                acc_2 = sess.run(acc, feed_dict={x_f: test_data[:, :4], x_l: test_data[:, 4:-4],
+                                                 y: test_data[:, -4:], is_training: False})
                 print('第%s轮训练集损失函数值为: %s  训练集准确率为: %s  测试集准确率为: %s' % (i, loss_, acc_1, acc_2))
         # 保存模型到文件当前脚本文件路径下的pb格式
         saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_1',
                                         ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
-                                        pb_file_path=r'/home/xiaosong/桌面/full_model_1')
+                                        pb_file_path=r'/home/xiaosong/桌面/model/full_model_1')
         saving_model.save_pb()
 
 def session_sub2(dataset_path, train_path='', test_path=''):
@@ -101,27 +101,27 @@ def session_sub2(dataset_path, train_path='', test_path=''):
         train_data, test_data = spliting(dataset, 3300)
         for i in range(20000):
             for data in input(dataset=train_data, batch_size=500):
-                _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-11], y: data[:, -11:],
+                _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-10], y: data[:, -10:],
                                              learning_rate: 1e-2, is_training: False})
                 if i % 100 == 0:
-                    loss_ = sess.run(loss, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-11], y: data[:, -11:],
+                    loss_ = sess.run(loss, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-10], y: data[:, -10:],
                                                       is_training: False})
-                    acc_1 = sess.run(acc, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-11], y: data[:, -11:],
+                    acc_1 = sess.run(acc, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-10], y: data[:, -10:],
                                                      is_training: False})
             if i % 100 == 0:
-                acc_2 = sess.run(acc, feed_dict={x_f: test_data[:, :4], x_l: test_data[:, 4:-11],
-                                                 y: test_data[:, -11:], is_training: False})
+                acc_2 = sess.run(acc, feed_dict={x_f: test_data[:, :4], x_l: test_data[:, 4:-10],
+                                                 y: test_data[:, -10:], is_training: False})
                 print('第%s轮训练集损失函数值为: %s  训练集准确率为: %s  测试集准确率为: %s' % (i, loss_, acc_1, acc_2))
-                if acc_2 > 0.88:
+                if acc_2 > 0.95:
                     break
         # 保存模型到文件当前脚本文件路径下的pb格式
         saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_2',
                                         ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
-                                        pb_file_path=r'/home/xiaosong/桌面/full_model_2')
+                                        pb_file_path=r'/home/xiaosong/桌面/model/full_model_2')
         saving_model.save_pb()
 
 if __name__ == '__main__':
-    p1 = r'/home/xiaosong/桌面/data_sub1.pickle'
-    p2 = r'/home/xiaosong/桌面/data_sub2.pickle'
+    p1 = r'/home/xiaosong/桌面/OLDENBURG_sub1.pickle'
+    p2 = r'/home/xiaosong/桌面/OLDENBURG_sub2.pickle'
     # session_sub1(dataset_path=p1)
     session_sub2(dataset_path=p2)
