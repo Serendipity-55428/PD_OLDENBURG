@@ -40,7 +40,7 @@ def layers(x_f, x_l, is_training):
     with tf.name_scope('rnn'):
         x_lstm = tf.reshape(tensor=flat1, shape=[-1, 24, 24], name='x_lstm')
         # lstm1 = tf.keras.layers.LSTM(units=128, dropout=0.8, return_sequences=True, name='lstm1')(x_lstm)
-        lstm2 = tf.keras.layers.LSTM(units=64, dropout=0.8, return_sequences=False, name='lstm2')(x_lstm)
+        lstm2 = tf.keras.layers.LSTM(units=64, dropout=0.8, return_sequences=False, name='lstm1')(x_lstm)
         flat2 = tf.keras.layers.Flatten(name='flat2')(lstm2)
     with tf.name_scope('dnn'):
         x_dnn = tf.concat(values=[flat2, x_f], axis=1)

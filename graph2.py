@@ -46,7 +46,7 @@ def session_sub1(dataset_path, train_path='', test_path=''):
         sess.run(init)
         # 划分训练集和测试集
         train_data, test_data = spliting(dataset, 2269)
-        for i in range(20000):
+        for i in range(1): #20000
             for data in input(dataset=train_data, batch_size=500):
                 _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-4], y: data[:, -4:],
                                              learning_rate: 1e-2, is_training: False})
@@ -59,11 +59,12 @@ def session_sub1(dataset_path, train_path='', test_path=''):
                 acc_2 = sess.run(acc, feed_dict={x_f: test_data[:, :4], x_l: test_data[:, 4:-4],
                                                  y: test_data[:, -4:], is_training: False})
                 print('第%s轮训练集损失函数值为: %s  训练集准确率为: %s  测试集准确率为: %s' % (i, loss_, acc_1, acc_2))
+        tf.summary.FileWriter('log/second_graph1', sess.graph)
         # 保存模型到文件当前脚本文件路径下的pb格式
-        saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_1',
-                                        ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
-                                        pb_file_path=r'/home/xiaosong/桌面/model/full_model_1')
-        saving_model.save_pb()
+        # saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_1',
+        #                                 ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
+        #                                 pb_file_path=r'/home/xiaosong/桌面/model/full_model_1')
+        # saving_model.save_pb()
 
 def session_sub2(dataset_path, train_path='', test_path=''):
     '''
@@ -99,7 +100,7 @@ def session_sub2(dataset_path, train_path='', test_path=''):
         sess.run(init)
         # 划分训练集和测试集
         train_data, test_data = spliting(dataset, 3300)
-        for i in range(20000):
+        for i in range(1): #20000
             for data in input(dataset=train_data, batch_size=500):
                 _ = sess.run(opt, feed_dict={x_f: data[:, :4], x_l: data[:, 4:-10], y: data[:, -10:],
                                              learning_rate: 1e-2, is_training: False})
@@ -114,14 +115,15 @@ def session_sub2(dataset_path, train_path='', test_path=''):
                 print('第%s轮训练集损失函数值为: %s  训练集准确率为: %s  测试集准确率为: %s' % (i, loss_, acc_1, acc_2))
                 if acc_2 > 0.95:
                     break
+        tf.summary.FileWriter('log/second_graph2', sess.graph)
         # 保存模型到文件当前脚本文件路径下的pb格式
-        saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_2',
-                                        ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
-                                        pb_file_path=r'/home/xiaosong/桌面/model/full_model_2')
-        saving_model.save_pb()
+        # saving_model = SaveImport_model(sess_ori=sess, file_suffix=r'/second_classifier_2',
+        #                                 ops=(output, x_f, x_l, is_training), usefulplaceholder_count=4,
+        #                                 pb_file_path=r'/home/xiaosong/桌面/model/full_model_2')
+        # saving_model.save_pb()
 
 if __name__ == '__main__':
-    p1 = r'/home/xiaosong/桌面/OLDENBURG_sub1.pickle'
-    p2 = r'/home/xiaosong/桌面/OLDENBURG_sub2.pickle'
-    # session_sub1(dataset_path=p1)
+    p1 = r'/home/xiaosong/桌面/oldenburg相关数据/data_oldenburg/OLDENBURG_sub1.pickle'
+    p2 = r'/home/xiaosong/桌面/oldenburg相关数据/data_oldenburg/OLDENBURG_sub2.pickle'
+    session_sub1(dataset_path=p1)
     session_sub2(dataset_path=p2)
