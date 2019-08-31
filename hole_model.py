@@ -21,7 +21,7 @@ def first_check(input):
     :param input: 输入特征向量(矩阵)/标签
     :return: 半径所属大类别, numpy.ndarray
     '''
-    pb_file_path = r'/home/xiaosong/桌面/model/full_model'
+    pb_file_path = r'/home/xiaosong/桌面/oldenburg相关数据/model/full_model'
     g1 = tf.Graph()
     with g1.as_default():
         init = tf.global_variables_initializer()
@@ -45,7 +45,7 @@ def second_check1(input):
     :return: 具体类别, numpy.ndarray
     '''
     dict1 = {0:7.395086, 1:14.790171, 2:29.580343, 3:51.7656}
-    pb_file_path = r'/home/xiaosong/桌面/model/full_model_1'
+    pb_file_path = r'/home/xiaosong/桌面/oldenburg相关数据/model/full_model_1'
     g2 = tf.Graph()
     with g2.as_default():
         init = tf.global_variables_initializer()
@@ -74,7 +74,7 @@ def second_check2(input):
     '''
     dict2 = {0:0.05, 1:0.672281, 2:0.924386, 3:1.479017, 4:3.697543, 5:4.930057,
              6:20.0, 7:22.185257, 8:36.975428, 9:44.370514}
-    pb_file_path = r'/home/xiaosong/桌面/model/full_model_2'
+    pb_file_path = r'/home/xiaosong/桌面/oldenburg相关数据/model/full_model_2'
     g3 = tf.Graph()
     with g3.as_default():
         init = tf.global_variables_initializer()

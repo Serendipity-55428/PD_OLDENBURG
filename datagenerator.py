@@ -171,7 +171,7 @@ if __name__ == '__main__':
     save_pickle = r'/home/xiaosong/桌面/OLDENBURG_all.pickle'
     # save_xlsx = r'/home/xiaosong/桌面/datasets.xlsx'
     # Numpy2Excel(data= dataset, save_p= save_xlsx)
-    # SaveFile(data=dataset, savepickle_p=save_pickle)
+    SaveFile(data=dataset, savepickle_p=save_pickle)
 
     #划分最优半径含0.01和不含0.01的数据
     # data_all_ = LoadFile(p=save_pickle)
